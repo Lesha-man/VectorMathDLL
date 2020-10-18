@@ -12,7 +12,7 @@ namespace VectorAndPolygonMath
             float t = Vector2D.Dot(a - point, l) / l.SqrLength;
             if      (t <= 0) return a;
             else if (t >= 1) return b;
-            else /*0> t <1*/ return a - l * t;
+            else             return a - l * t;
         }
         static public float MinDistansePointСontour(Vector2D[] vertex, Vector2D point, out Vector2D closestVectorPoly) //ближайшая точка на контуре многоугольника vertex к точке point, возвращает расстояние между ними
         {
