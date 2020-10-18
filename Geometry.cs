@@ -7,8 +7,7 @@ namespace VectorAndPolygonMath
     {
         static private Vector2D MinDistansePointLineSigment(Vector2D a, Vector2D b, Vector2D point) //ближайшая точка на отрезке к точке point
         {
-            Vector2D l;
-            l = a - b;
+            Vector2D l = a - b;
             float t = Vector2D.Dot(a - point, l) / l.SqrLength;
             if      (t <= 0) return a;
             else if (t >= 1) return b;
@@ -46,7 +45,7 @@ namespace VectorAndPolygonMath
         {
             if (vertex.Length < 3) throw new Exception("Polygon must have over 2 points");
 
-            if (LineSide(vertex.Last(), vertex[0], point) >= 0) 
+            if (LineSide(vertex.Last(), vertex.First(), point) >= 0) 
                 return false;
 
             for (int i = 1; i < vertex.Length; i++)

@@ -5,14 +5,13 @@ namespace VectorAndPolygonMath
     class Vector2D
     {
         #region Incaps
-        bool notActualLenght;
-        bool notActualSqrLenght;
         private float x;
         private float y;
         private float sqrLenght;
         private float lenght;
         #endregion
         public float X
+        #region X
         {
             get => x; 
             set
@@ -22,7 +21,9 @@ namespace VectorAndPolygonMath
                 x = value;
             }
         }
-        public float Y
+        #endregion
+        public float Y 
+        #region Y
         {
             get => y; 
             set
@@ -32,7 +33,9 @@ namespace VectorAndPolygonMath
                 y = value;
             }
         }
+        #endregion
         public float SqrLength
+        #region SqrtLength
         {
             get
             {
@@ -41,7 +44,15 @@ namespace VectorAndPolygonMath
                 return sqrLenght;
             }
         }
+        bool notActualSqrLenght;
+        private void UpdateSqrLength()
+        {
+            sqrLenght = X * X + Y * Y;
+            notActualLenght = false;
+        }
+        #endregion
         public float Length
+        #region Length
         {
             get
             {
@@ -62,22 +73,28 @@ namespace VectorAndPolygonMath
                 Y /= lenght * value;
             }
         }
-        
-        public Vector2D(float x, float y)
-        {
-            X = x; 
-            Y = y;
-        }
-        
+        bool notActualLenght;
         private void UpdateLength()
         {
             lenght = (float)Math.Sqrt(sqrLenght);
             notActualLenght = false;
         }
-        private void UpdateSqrLength()
+        #endregion
+
+        public Vector2D()
         {
-            sqrLenght = X * X + Y * Y;
-            notActualLenght = false;
+            X = 0;
+            Y = 0;
+        }
+        public Vector2D(Vector2D vector)
+        {
+            X = vector.X;
+            Y = vector.Y;
+        }
+        public Vector2D(float x, float y)
+        {
+            X = x;
+            Y = y;
         }
 
         #region operators
