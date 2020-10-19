@@ -2,12 +2,12 @@
 
 namespace VectorAndPolygonMath
 {
-    class Vector2D
+    public class Vector2D
     {
         #region Incaps
         private float x;
         private float y;
-        private float sqrLenght;
+        private float sqrLength;
         private float lenght;
         #endregion
         public float X
@@ -41,13 +41,13 @@ namespace VectorAndPolygonMath
             {
                 if (notActualSqrLenght)
                     UpdateSqrLength();
-                return sqrLenght;
+                return sqrLength;
             }
         }
         bool notActualSqrLenght;
         private void UpdateSqrLength()
         {
-            sqrLenght = X * X + Y * Y;
+            sqrLength = X * X + Y * Y;
             notActualLenght = false;
         }
         #endregion
@@ -76,7 +76,7 @@ namespace VectorAndPolygonMath
         bool notActualLenght;
         private void UpdateLength()
         {
-            lenght = (float)Math.Sqrt(sqrLenght);
+            lenght = (float)Math.Sqrt(SqrLength);
             notActualLenght = false;
         }
         #endregion
@@ -132,18 +132,19 @@ namespace VectorAndPolygonMath
         }
         static public bool operator ==(Vector2D Vector1, Vector2D Vector2)
         {
-            return (Vector1.X == Vector2.X) && (Vector1.X == Vector2.X);
+            return (Vector1.X == Vector2.X) && (Vector1.Y == Vector2.Y);
         }
         static public bool operator !=(Vector2D Vector1, Vector2D Vector2)
         {
-            return (Vector1.X != Vector2.X) || (Vector1.X != Vector2.X);
+            return (Vector1.X != Vector2.X) || (Vector1.Y != Vector2.Y);
         }
 
         public override bool Equals(object o)
         {
-            if (o == null)
+            Vector2D vector = o as Vector2D;
+            if (vector == null)
                 return false;
-            return true;
+            return X == vector.X && Y == vector.Y;
         }
 
         public override int GetHashCode() { return 0; }
@@ -167,7 +168,7 @@ namespace VectorAndPolygonMath
             return vec1.X * vec2.X + vec1.Y * vec2.Y;
         }
 
-        public Vector2D GetCuted()
+        public Vector2D Normalise()
         {
             if (Length < 0.0001) 
                 return new Vector2D(float.MaxValue, float.MaxValue);

@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace VectorAndPolygonMath
 {
-    static class Geometry
+    static public class Geometry
     {
-        static private Vector2D MinDistansePointLineSigment(Vector2D a, Vector2D b, Vector2D point) //ближайшая точка на отрезке к точке point
+        static public Vector2D MinDistansePointLineSigment(Vector2D a, Vector2D b, Vector2D point) //ближайшая точка на отрезке к точке point
         {
             Vector2D l = a - b;
             float t = Vector2D.Dot(a - point, l) / l.SqrLength;
@@ -36,9 +36,10 @@ namespace VectorAndPolygonMath
             return (b - a).Length;
         }
 
-        static private float LineSide(Vector2D a, Vector2D b, Vector2D point) //по какую сторону находится точка point от прямой (a, b)(смотреть по знаку возвращаемого числа)
+        static public float LineSide(Vector2D a, Vector2D b, Vector2D point) //по какую сторону находится точка point от прямой (a, b)(смотреть по знаку возвращаемого числа)
         {
-            return (a.X - point.X) * (b.Y - a.Y) - (b.X - a.X) * (a.Y - point.Y);
+            //return (a.X - point.X) * (b.Y - a.Y) - (b.X - a.X) * (a.Y - point.Y);
+            return (b - a) % (point - a);
         }
 
         static public bool InPoly(Vector2D[] vertex, Vector2D point) //находится ли точка point внутри выпуклого многоугольника. Точки многоугольника строго по часовой стрелке!!!
@@ -55,13 +56,15 @@ namespace VectorAndPolygonMath
             return true;
         }
 
-        static public bool IntersectionOfLineAndLineSigment(Vector2D line1, Vector2D line2, Vector2D lineSigment1, Vector2D lineSigment2) //пресекаются ли прямая (line1, line2) и отрезок (lineSigment1, lineSigment2)
+        static public bool IntersectionOfLineAndLineSigment(Vector2D line1, Vector2D line2, Vector2D lineSigment1, Vector2D lineSigment2, out Vector2D P) //пресекаются ли прямая (line1, line2) и отрезок (lineSigment1, lineSigment2)
         {
             float t = (line1 - line2) % (lineSigment1 - lineSigment2);
-            if (t == 0) 
+            if (t == 0)
+            {
+                P = new Vector2D();
                 return false;
-
-            Vector2D P = new Vector2D(line1 % line2 * (lineSigment1.X - lineSigment2.X) - lineSigment1 % lineSigment2 * (line1.X - line2.X), line1 % line2 * (lineSigment1.Y - lineSigment2.Y) - lineSigment1 % lineSigment2 * (line1.Y - line2.Y));
+            }
+            P = new Vector2D(line1 % line2 * (lineSigment1.X - lineSigment2.X) - lineSigment1 % lineSigment2 * (line1.X - line2.X), line1 % line2 * (lineSigment1.Y - lineSigment2.Y) - lineSigment1 % lineSigment2 * (line1.Y - line2.Y));
             const float esp = 0.0001f;//не помню зачем это тут, написано кровью
             P /= t;
             if (((P.X <= lineSigment1.X + esp && P.X >= lineSigment2.X - esp) || 
