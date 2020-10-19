@@ -173,7 +173,6 @@ namespace VectorAndPolygonMath
             if (Length < 0.0001) 
                 return new Vector2D(float.MaxValue, float.MaxValue);
 
-            
             return new Vector2D(X / Length, Y / Length);
         }
     }
