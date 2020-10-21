@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace VectorAndPolygonMath
 {
     public class Vector2D
     {
-        #region Incaps
+        public static Vector2D NaN_Vector = new Vector2D(float.NaN, float.NaN);
+        private const double eps = 0.00001f;
+        #region EncapsulatedFilds
         private float x;
         private float y;
         private float sqrLength;
@@ -13,7 +16,7 @@ namespace VectorAndPolygonMath
         public float X
         #region X
         {
-            get => x; 
+            get => x;
             set
             {
                 notActualLenght = true;
@@ -22,10 +25,10 @@ namespace VectorAndPolygonMath
             }
         }
         #endregion
-        public float Y 
+        public float Y
         #region Y
         {
-            get => y; 
+            get => y;
             set
             {
                 notActualLenght = true;
@@ -51,6 +54,7 @@ namespace VectorAndPolygonMath
             notActualLenght = false;
         }
         #endregion
+        [XmlIgnore]
         public float Length
         #region Length
         {
@@ -66,8 +70,8 @@ namespace VectorAndPolygonMath
                 if (notActualLenght)
                     UpdateLength();
 
-                if (lenght < 0.0001f)
-                    X = Y = float.MaxValue;
+                if (lenght < eps)
+                    X = Y = float.NaN;
 
                 X /= lenght * value;
                 Y /= lenght * value;
@@ -138,7 +142,6 @@ namespace VectorAndPolygonMath
         {
             return (Vector1.X != Vector2.X) || (Vector1.Y != Vector2.Y);
         }
-
         public override bool Equals(object o)
         {
             Vector2D vector = o as Vector2D;
@@ -146,8 +149,10 @@ namespace VectorAndPolygonMath
                 return false;
             return X == vector.X && Y == vector.Y;
         }
-
-        public override int GetHashCode() { return 0; }
+        public override int GetHashCode()
+        {
+            return (x.GetHashCode() << 16 + y.GetHashCode() >> 16); 
+        }
         static public float operator %(Vector2D vec1, Vector2D vec2)
         {
             return vec1.X * vec2.Y - (vec1.Y * vec2.X);
@@ -168,12 +173,16 @@ namespace VectorAndPolygonMath
             return vec1.X * vec2.X + vec1.Y * vec2.Y;
         }
 
-        public Vector2D Normalise()
+        public Vector2D Normalize()
         {
-            if (Length < 0.0001) 
-                return new Vector2D(float.MaxValue, float.MaxValue);
+            if (Length < eps)
+                return NaN_Vector;
 
             return new Vector2D(X / Length, Y / Length);
+        }
+        public Vector2D Normalize(float newLength)
+        {
+            return Normalize() * newLength;
         }
     }
 }
