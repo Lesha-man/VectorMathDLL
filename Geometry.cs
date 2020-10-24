@@ -38,7 +38,6 @@ namespace VectorAndPolygonMath
 
         static public float LineSide(Vector2D a, Vector2D b, Vector2D point) //по какую сторону находится точка point от прямой (a, b)(смотреть по знаку возвращаемого числа)
         {
-            //return (a.X - point.X) * (b.Y - a.Y) - (b.X - a.X) * (a.Y - point.Y);
             return (b - a) % (point - a);
         }
 
@@ -65,7 +64,7 @@ namespace VectorAndPolygonMath
                 return false;
             }
             P = new Vector2D(line1 % line2 * (lineSigment1.X - lineSigment2.X) - lineSigment1 % lineSigment2 * (line1.X - line2.X), line1 % line2 * (lineSigment1.Y - lineSigment2.Y) - lineSigment1 % lineSigment2 * (line1.Y - line2.Y));
-            const float esp = 0.0001f;//не помню зачем это тут, написано кровью
+            const float esp = 0.0001f; //не помню зачем это тут, написано кровью
             P /= t;
             if (((P.X <= lineSigment1.X + esp && P.X >= lineSigment2.X - esp) || 
                 (P.X >= lineSigment1.X - esp && P.X <= lineSigment2.X + esp)) 
