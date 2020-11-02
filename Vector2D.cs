@@ -10,17 +10,16 @@ namespace VectorAndPolygonMath
         private float x;
         private float y;
         private float sqrLength;
-        private float lenght;
+        private float length;
         #endregion
-        public static Vector2D NaN_Vector = new Vector2D(float.NaN, float.NaN);
+        public static Vector2D NaN_Vector { get; } = new Vector2D(float.NaN, float.NaN);
         public float X
         #region X
         {
             get => x;
             set
             {
-                notActualLenght = true;
-                notActualSqrLenght = true;
+                length = sqrLength = float.NaN;
                 x = value;
             }
         }
@@ -31,27 +30,25 @@ namespace VectorAndPolygonMath
             get => y;
             set
             {
-                notActualLenght = true;
-                notActualSqrLenght = true;
+                length = sqrLength = float.NaN;
                 y = value;
             }
         }
         #endregion
+        [XmlIgnore]
         public float SqrLength
         #region SqrtLength
         {
             get
             {
-                if (notActualSqrLenght)
+                if (float.IsNaN(sqrLength))
                     UpdateSqrLength();
                 return sqrLength;
             }
         }
-        bool notActualSqrLenght;
         private void UpdateSqrLength()
         {
             sqrLength = X * X + Y * Y;
-            notActualLenght = false;
         }
         #endregion
         [XmlIgnore]
@@ -60,28 +57,26 @@ namespace VectorAndPolygonMath
         {
             get
             {
-                if (notActualLenght)
+                if (float.IsNaN(length))
                     UpdateLength();
 
-                return lenght;
+                return length;
             }
             set
             {
-                if (notActualLenght)
+                if (float.IsNaN(length))
                     UpdateLength();
 
-                if (lenght < eps)
+                if (length < eps)
                     X = Y = float.NaN;
 
-                X /= lenght * value;
-                Y /= lenght * value;
+                X /= length * value;
+                Y /= length * value;
             }
         }
-        bool notActualLenght;
         private void UpdateLength()
         {
-            lenght = (float)Math.Sqrt(SqrLength);
-            notActualLenght = false;
+            length = (float)Math.Sqrt(SqrLength);
         }
         #endregion
 
